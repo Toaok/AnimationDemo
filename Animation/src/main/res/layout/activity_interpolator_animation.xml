@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".xml.BaseAnimationActivity">
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/interpolator_accelerate_decelerate"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accelerate Decelerate"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@id/interpolator_accelerate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/interpolator_accelerate"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accelerate"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/interpolator_accelerate_decelerate"
+        app:layout_constraintTop_toTopOf="@id/interpolator_accelerate_decelerate" />
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/interpolator_anticipate_overshoot"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Anticipate Overshoot"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@id/interpolator_anticipate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/interpolator_accelerate_decelerate" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/interpolator_anticipate"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Anticipate"
+        android:textAllCaps="false"
+        app:layout_constraintBottom_toBottomOf="@id/interpolator_anticipate_overshoot"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/interpolator_anticipate_overshoot"
+        app:layout_constraintTop_toTopOf="@id/interpolator_anticipate_overshoot" />
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/interpolator_bounce"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bounce"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@id/interpolator_cycle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/interpolator_anticipate_overshoot" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/interpolator_cycle"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cycle"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/interpolator_bounce"
+        app:layout_constraintTop_toTopOf="@id/interpolator_bounce" />
+
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/interpolator_decelerate"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Decelerate"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toStartOf="@id/interpolator_linear"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/interpolator_bounce" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/interpolator_linear"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Linear"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/interpolator_decelerate"
+        app:layout_constraintTop_toTopOf="@id/interpolator_decelerate" />
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/interpolator_overshoot"
+        style="@style/Base.TextAppearance.AppCompat.Widget.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Overshoot"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/interpolator_decelerate" />
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="160dp"
+        android:layout_height="96dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/interpolator_overshoot" />
+
+</android.support.constraint.ConstraintLayout>

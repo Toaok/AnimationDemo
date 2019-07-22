@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".MainActivity">
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/xml_example"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="XML Example"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toTopOf="@id/code_example"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/code_example"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Code Example"
+            android:textAllCaps="false"
+            app:layout_constraintBottom_toTopOf="@id/view_animation_widget"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/xml_example" />
+
+        <indi.toaok.animation.code.widget.ViewAnimationWidget
+            android:id="@+id/view_animation_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toTopOf="@id/property_animation_widget"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/code_example" />
+
+        <indi.toaok.animation.code.widget.PropertyAnimationWidget
+            android:id="@+id/property_animation_widget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/view_animation_widget" />
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.v4.widget.SwipeRefreshLayout>

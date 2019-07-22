@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="indi.toaok.animation">
+
+    <application>
+        <activity android:name=".ExampleActivity" />
+        <activity android:name=".MainActivity" />
+
+
+        <activity android:name=".xml.InterpolatorAnimationActivity" />
+        <activity android:name=".xml.BaseAnimationActivity" />
+
+
+        <activity android:name=".code.BaseAnimationActivity" />
+        <activity android:name=".code.InterpolatorAnimationActivity" />
+    </application>
+
+</manifest>
