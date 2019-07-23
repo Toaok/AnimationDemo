@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".xml.BaseAnimationActivity">
+    tools:context=".core.view.xml.BaseAnimationActivity">
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/interpolator_accelerate_decelerate"

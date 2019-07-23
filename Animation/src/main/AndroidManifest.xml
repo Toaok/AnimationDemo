@@ -7,12 +7,12 @@
         <activity android:name=".MainActivity" />
 
 
-        <activity android:name=".xml.InterpolatorAnimationActivity" />
-        <activity android:name=".xml.BaseAnimationActivity" />
+        <activity android:name=".core.view.xml.InterpolatorAnimationActivity" />
+        <activity android:name=".core.view.xml.BaseAnimationActivity" />
 
 
-        <activity android:name=".code.BaseAnimationActivity" />
-        <activity android:name=".code.InterpolatorAnimationActivity" />
+        <activity android:name=".core.view.code.BaseAnimationActivity" />
+        <activity android:name=".core.view.code.InterpolatorAnimationActivity" />
     </application>
 
 </manifest>

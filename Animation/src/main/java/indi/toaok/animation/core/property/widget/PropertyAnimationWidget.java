@@ -1,4 +1,4 @@
-package indi.toaok.animation.code.widget;
+package indi.toaok.animation.core.property.widget;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
@@ -21,6 +21,8 @@ import indi.toaok.animation.MeasureUtil;
  */
 public class PropertyAnimationWidget extends View {
 
+    //最小的弧度
+    int minArcAngle;
     //最小的间隔角度
     int minSpaceAngle;
     //真实的间隔角度
@@ -39,8 +41,17 @@ public class PropertyAnimationWidget extends View {
     Paint mPaint;
     AnimatorSet mPositiveAnimatorSet;
     AnimatorSet mNegativeAnimatorSet;
+
+
     ObjectAnimator mPositiveValueAnimator;
     ObjectAnimator mNegativeValueAnimator;
+
+    ObjectAnimator mPositiveAlphaAnimator;
+    ObjectAnimator mNegativeAlphaAnimator;
+
+    ObjectAnimator mPositiveTranslationAnimator;
+    ObjectAnimator mNegativeTranslationAnimator;
+
     ObjectAnimator mPositiveRotationAnimator;
     ObjectAnimator mNegativeRotationAnimator;
 
@@ -59,50 +70,73 @@ public class PropertyAnimationWidget extends View {
     }
 
     private void init(Context context, AttributeSet attrs) {
-        minSpaceAngle = 15;
+        minArcAngle = 3;
+        minSpaceAngle = 25;
         realSpaceAngle = minSpaceAngle;
         realStartAngle = 0;
         paidding = 10;
-        defaultSize = MeasureUtil.dip2px(getContext(), 50);
+        defaultSize = MeasureUtil.dip2px(getContext(), 45);
 
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(Color.BLACK);
         mPaint.setAntiAlias(true);
-        mPaint.setStrokeWidth(12);
+        mPaint.setStrokeWidth(MeasureUtil.dip2px(getContext(),4));
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
 
         initAnimation();
+    }
+
+    @Override
+    public void setTranslationZ(float translationZ) {
+        super.setTranslationZ(translationZ);
     }
 
     @SuppressLint("ObjectAnimatorBinding")
     private void initAnimation() {
         mPositiveRotationAnimator = ObjectAnimator.ofFloat(this, "rotation", 0, 720);
         mPositiveRotationAnimator.setInterpolator(new DecelerateInterpolator());
-        mPositiveValueAnimator = ObjectAnimator.ofInt(this, "spaceAngle", minSpaceAngle, 360 / sum - minSpaceAngle);
+
+        mPositiveAlphaAnimator = ObjectAnimator.ofFloat(this, "alpha", 0f, 1f);
+        mPositiveAlphaAnimator.setInterpolator(new DecelerateInterpolator());
+
+        mPositiveTranslationAnimator=ObjectAnimator.ofFloat(this, "translationY", 0f, 200f);
+        mPositiveTranslationAnimator.setInterpolator(new DecelerateInterpolator());
+
+        mPositiveValueAnimator = ObjectAnimator.ofInt(this, "spaceAngle", minSpaceAngle, 360 / sum - minArcAngle);
         mPositiveValueAnimator.setInterpolator(new DecelerateInterpolator());
+
         mPositiveAnimatorSet = new AnimatorSet();
         mPositiveAnimatorSet.setInterpolator(new DecelerateInterpolator());
-        mPositiveAnimatorSet.playTogether(mPositiveRotationAnimator, mPositiveValueAnimator);
-
+        mPositiveAnimatorSet.playTogether(mPositiveRotationAnimator,mPositiveAlphaAnimator, mPositiveTranslationAnimator,mPositiveValueAnimator);
 
 
         mNegativeRotationAnimator = ObjectAnimator.ofFloat(this, "rotation", 720, 0);
         mNegativeRotationAnimator.setInterpolator(new DecelerateInterpolator());
-        mNegativeValueAnimator = ObjectAnimator.ofInt(this, "spaceAngle", 360 / sum - minSpaceAngle, minSpaceAngle);
+
+        mNegativeAlphaAnimator = ObjectAnimator.ofFloat(this, "alpha", 1f, 0f);
+        mNegativeAlphaAnimator.setInterpolator(new DecelerateInterpolator());
+
+        mNegativeTranslationAnimator=ObjectAnimator.ofFloat(this, "translationY", 200f, 0f);
+        mNegativeTranslationAnimator.setInterpolator(new DecelerateInterpolator());
+
+        mNegativeValueAnimator = ObjectAnimator.ofInt(this, "spaceAngle", 360 / sum - minArcAngle, minSpaceAngle);
         mNegativeValueAnimator.setInterpolator(new DecelerateInterpolator());
+
         mNegativeAnimatorSet = new AnimatorSet();
         mNegativeAnimatorSet.setInterpolator(new DecelerateInterpolator());
-        mNegativeAnimatorSet.playTogether(mNegativeRotationAnimator, mNegativeValueAnimator);
+        mNegativeAnimatorSet.playTogether(mNegativeRotationAnimator,mNegativeAlphaAnimator, mNegativeTranslationAnimator,mNegativeValueAnimator);
     }
 
     /**
      * 用于ObjectAnimator回调
      * ObjectAnimator中的propertyName
+     *
      * @param spaceAngle
      */
     public void setSpaceAngle(int spaceAngle) {
-        if (spaceAngle > 360 / sum - minSpaceAngle) {
-            realSpaceAngle = 360 / sum - minSpaceAngle;
+        if (spaceAngle > 360 / sum - minArcAngle) {
+            realSpaceAngle = 360 / sum - minArcAngle;
         } else if (spaceAngle > minSpaceAngle) {
             realSpaceAngle = spaceAngle;
         } else {
@@ -137,18 +171,23 @@ public class PropertyAnimationWidget extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
         int withSpaceSweep = 360 / sum;
         int withOutSpaceSweep = withSpaceSweep - realSpaceAngle;
 
+
+        canvas.save();
         RectF rect = new RectF(0 + paidding, 0 + paidding, getWidth() - paidding, getHeight() - paidding);//绘制的最终区域，一定填满
         for (int i = 0; i < sum; i++) {
             canvas.drawArc(rect, realStartAngle, withOutSpaceSweep, false, mPaint);
             realStartAngle += withSpaceSweep;
         }
+        canvas.restore();
     }
 
 
     public void startAnimation(int time) {
+
         if (isPositive) {
             mPositiveAnimatorSet.setDuration(time);
             mPositiveAnimatorSet.start();

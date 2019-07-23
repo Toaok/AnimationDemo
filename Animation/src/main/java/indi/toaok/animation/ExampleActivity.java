@@ -60,18 +60,18 @@ public class ExampleActivity extends AppCompatActivity implements View.OnClickLi
     private void xmlEventHandle(View view) {
         int i = view.getId();
         if (i == R.id.base_animation) {
-            startActivity(new Intent(ExampleActivity.this, indi.toaok.animation.xml.BaseAnimationActivity.class));
+            startActivity(new Intent(ExampleActivity.this, indi.toaok.animation.core.view.xml.BaseAnimationActivity.class));
         } else if (i == R.id.interpolator_animation) {
-            startActivity(new Intent(ExampleActivity.this, indi.toaok.animation.xml.InterpolatorAnimationActivity.class));
+            startActivity(new Intent(ExampleActivity.this, indi.toaok.animation.core.view.xml.InterpolatorAnimationActivity.class));
         }
     }
 
     private void codeEventHandle(View view) {
         int i = view.getId();
         if (i == R.id.base_animation) {
-            startActivity(new Intent(ExampleActivity.this, indi.toaok.animation.code.BaseAnimationActivity.class));
+            startActivity(new Intent(ExampleActivity.this, indi.toaok.animation.core.view.code.BaseAnimationActivity.class));
         } else if (i == R.id.interpolator_animation) {
-            startActivity(new Intent(ExampleActivity.this, indi.toaok.animation.code.InterpolatorAnimationActivity.class));
+            startActivity(new Intent(ExampleActivity.this, indi.toaok.animation.core.view.code.InterpolatorAnimationActivity.class));
         }
     }
 

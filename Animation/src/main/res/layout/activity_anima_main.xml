@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<indi.toaok.animation.core.property.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipe_refresh_layout"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -34,7 +35,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/xml_example" />
 
-        <indi.toaok.animation.code.widget.ViewAnimationWidget
+        <indi.toaok.animation.core.view.ViewAnimationWidget
             android:id="@+id/view_animation_widget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,14 +44,16 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/code_example" />
 
-        <indi.toaok.animation.code.widget.PropertyAnimationWidget
+        <indi.toaok.animation.core.property.widget.PropertyAnimationWidget
             android:id="@+id/property_animation_widget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            android:alpha="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_animation_widget" />
     </android.support.constraint.ConstraintLayout>
 
-</android.support.v4.widget.SwipeRefreshLayout>
+
+</indi.toaok.animation.core.property.widget.SwipeRefreshLayout>

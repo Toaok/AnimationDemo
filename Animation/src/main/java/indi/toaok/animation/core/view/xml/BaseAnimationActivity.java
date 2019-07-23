@@ -1,4 +1,4 @@
-package indi.toaok.animation.xml;
+package indi.toaok.animation.core.view.xml;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
