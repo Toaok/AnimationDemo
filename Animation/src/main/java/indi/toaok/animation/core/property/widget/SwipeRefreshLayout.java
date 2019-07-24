@@ -29,7 +29,6 @@ import android.support.v4.view.NestedScrollingChildHelper;
 import android.support.v4.view.NestedScrollingParent;
 import android.support.v4.view.NestedScrollingParentHelper;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v4.widget.ListViewCompat;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -104,9 +103,13 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     // Default offset in dips from the top of the view to where the progress spinner should stop
     private static final int DEFAULT_CIRCLE_TARGET = 64;
 
+    //手势目标对象
     private View mTarget; // the target of the gesture
     OnRefreshListener mListener;
     boolean mRefreshing = false;
+
+
+    //触摸的偏移范围：大于该值才滑动
     private int mTouchSlop;
     private float mTotalDragDistance = -1;
 
@@ -332,6 +335,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     public SwipeRefreshLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
+        //（系统 滑动距离的最小值，大于该值可以认为滑动）
         mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
         mMediumAnimationDuration = getResources().getInteger(
@@ -564,6 +568,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         return mRefreshing;
     }
 
+    //获取手势目标对象
     private void ensureTarget() {
         // Don't bother getting the parent height if the parent hasn't been laid
         // out yet.
@@ -621,10 +626,12 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         if (mTarget == null) {
             return;
         }
-        mTarget.measure(MeasureSpec.makeMeasureSpec(
-                getMeasuredWidth() - getPaddingLeft() - getPaddingRight(),
-                MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(
-                getMeasuredHeight() - getPaddingTop() - getPaddingBottom(), MeasureSpec.EXACTLY));
+        mTarget.measure(
+                MeasureSpec.makeMeasureSpec(getMeasuredWidth() - getPaddingLeft() - getPaddingRight(),
+                        MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(getMeasuredHeight() - getPaddingTop() - getPaddingBottom(),
+                        MeasureSpec.EXACTLY));
+
         mCircleView.measure(MeasureSpec.makeMeasureSpec(mCircleDiameter, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(mCircleDiameter, MeasureSpec.EXACTLY));
         mCircleViewIndex = -1;
@@ -670,6 +677,7 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         mChildScrollUpCallback = callback;
     }
 
+    //事件拦截器
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         ensureTarget();
@@ -896,7 +904,6 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
     }
 
     private void moveSpinner(float overscrollTop) {
-        mProgress.setArrowEnabled(true);
         float originalDragPercent = overscrollTop / mTotalDragDistance;
 
         float dragPercent = Math.min(1f, Math.abs(originalDragPercent));
@@ -937,7 +944,6 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         }
         float strokeStart = adjustedPercent * .8f;
         mProgress.setStartEndTrim(0f, Math.min(MAX_PROGRESS_ANGLE, strokeStart));
-        mProgress.setArrowScale(Math.min(1f, adjustedPercent));
 
         float rotation = (-0.25f + .4f * adjustedPercent + tensionPercent * 2) * .5f;
         mProgress.setProgressRotation(rotation);
@@ -973,7 +979,6 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
                 };
             }
             animateOffsetToStartPosition(mCurrentTargetOffsetTop, listener);
-            mProgress.setArrowEnabled(false);
         }
     }
 
@@ -1056,7 +1061,9 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
         return true;
     }
 
+
     private void startDragging(float y) {
+        //垂直方向上移动的距离
         final float yDiff = y - mInitialDownY;
         if (yDiff > mTouchSlop && !mIsBeingDragged) {
             mInitialMotionY = mInitialDownY + mTouchSlop;
@@ -1107,7 +1114,6 @@ public class SwipeRefreshLayout extends ViewGroup implements NestedScrollingPare
             targetTop = (mFrom + (int) ((endTarget - mFrom) * interpolatedTime));
             int offset = targetTop - mCircleView.getTop();
             setTargetOffsetTopAndBottom(offset);
-            mProgress.setArrowScale(1 - interpolatedTime);
         }
     };
 

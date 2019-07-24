@@ -7,6 +7,7 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
+import android.view.MotionEvent;
 import android.view.View;
 
 import indi.toaok.animation.core.property.widget.PropertyAnimationWidget;
@@ -23,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
     AppCompatButton mCodeExample;
 
     ViewAnimationWidget mAnimationWidget;
+
     PropertyAnimationWidget mPropertyAnimationWidget;
 
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -97,12 +99,12 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
+
                         try {
-                            Thread.sleep(2000);
+                            Thread.sleep(3000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        LogUtil.e(Thread.currentThread().getName());
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {

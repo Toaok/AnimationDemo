@@ -21,6 +21,10 @@ import indi.toaok.animation.MeasureUtil;
  */
 public class PropertyAnimationWidget extends View {
 
+
+    static final int CIRCLE_DIAMETER = 40;
+
+
     //最小的弧度
     int minArcAngle;
     //最小的间隔角度
@@ -75,7 +79,7 @@ public class PropertyAnimationWidget extends View {
         realSpaceAngle = minSpaceAngle;
         realStartAngle = 0;
         paidding = 10;
-        defaultSize = MeasureUtil.dip2px(getContext(), 45);
+        defaultSize = MeasureUtil.dip2px(getContext(), CIRCLE_DIAMETER);
 
         mPaint = new Paint();
         mPaint.setStyle(Paint.Style.STROKE);
@@ -127,6 +131,18 @@ public class PropertyAnimationWidget extends View {
         mNegativeAnimatorSet.setInterpolator(new DecelerateInterpolator());
         mNegativeAnimatorSet.playTogether(mNegativeRotationAnimator,mNegativeAlphaAnimator, mNegativeTranslationAnimator,mNegativeValueAnimator);
     }
+
+    private void initStartAnimator(){
+
+    }
+
+    private void initRefreshingAnimator(){
+
+    }
+    private void initFinishAnimator(){
+
+    }
+
 
     /**
      * 用于ObjectAnimator回调
