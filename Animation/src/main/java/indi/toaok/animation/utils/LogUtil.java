@@ -5,7 +5,7 @@ import android.util.Log;
 import indi.toaok.animation.BuildConfig;
 
 /**
- * @author hpp
+ * @author Toaok
  * @version 1.0  2019/5/28.
  */
 public class LogUtil {

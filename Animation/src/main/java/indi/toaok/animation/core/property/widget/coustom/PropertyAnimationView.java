@@ -16,10 +16,10 @@ import android.view.animation.DecelerateInterpolator;
 import indi.toaok.animation.MeasureUtil;
 
 /**
- * @author hpp
+ * @author Toaok
  * @version 1.0  2019/7/18.
  */
-public class PropertyAnimationWidget extends View {
+public class PropertyAnimationView extends View {
 
 
     static final int CIRCLE_DIAMETER = 40;
@@ -60,15 +60,15 @@ public class PropertyAnimationWidget extends View {
     ObjectAnimator mNegativeRotationAnimator;
 
 
-    public PropertyAnimationWidget(Context context) {
+    public PropertyAnimationView(Context context) {
         this(context, null);
     }
 
-    public PropertyAnimationWidget(Context context, @Nullable AttributeSet attrs) {
+    public PropertyAnimationView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public PropertyAnimationWidget(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public PropertyAnimationView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }

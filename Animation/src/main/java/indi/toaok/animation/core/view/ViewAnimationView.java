@@ -17,10 +17,10 @@ import android.view.animation.Transformation;
 import indi.toaok.animation.MeasureUtil;
 
 /**
- * @author hpp
+ * @author Toaok
  * @version 1.0  2019/7/18.
  */
-public class ViewAnimationWidget extends View implements Animation.AnimationListener {
+public class ViewAnimationView extends View implements Animation.AnimationListener {
 
     //最小的间隔角度
     int minSpaceAngle;
@@ -40,15 +40,15 @@ public class ViewAnimationWidget extends View implements Animation.AnimationList
     DrawAnimation mDrawAnimation;
     RotateAnimation mRotateAnimation;
 
-    public ViewAnimationWidget(Context context) {
+    public ViewAnimationView(Context context) {
         this(context, null);
     }
 
-    public ViewAnimationWidget(Context context, @Nullable AttributeSet attrs) {
+    public ViewAnimationView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ViewAnimationWidget(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public ViewAnimationView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }

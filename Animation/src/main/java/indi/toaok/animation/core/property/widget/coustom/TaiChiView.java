@@ -1,5 +1,8 @@
 package indi.toaok.animation.core.property.widget.coustom;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -15,10 +18,10 @@ import android.view.animation.Transformation;
 import indi.toaok.animation.MeasureUtil;
 
 /**
- * @author GTW
+ * @author Toaok
  * @version 1.0  2019/7/24.
  */
-public class TaiChiWidget extends View {
+public class TaiChiView extends View {
 
 
     static final int CIRCLE_DIAMETER = 200;
@@ -30,15 +33,15 @@ public class TaiChiWidget extends View {
 
     int defaultSize;
 
-    public TaiChiWidget(Context context) {
+    public TaiChiView(Context context) {
         this(context, null);
     }
 
-    public TaiChiWidget(Context context, @Nullable AttributeSet attrs) {
+    public TaiChiView(Context context, @Nullable AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public TaiChiWidget(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public TaiChiView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
@@ -93,7 +96,7 @@ public class TaiChiWidget extends View {
         int widgth = canvas.getWidth();
         int height = canvas.getHeight();
 
-        int radius = Math.min(widgth, height) / 2-paidding;
+        int radius = Math.min(widgth, height) / 2 - paidding;
 
         //画布移动到中心
         canvas.translate(widgth / 2, height / 2);
@@ -126,42 +129,20 @@ public class TaiChiWidget extends View {
         startAnimation(3000);
     }
 
-    public void startAnimation(int durationMillis){
-        RotationAnimation animation=new RotationAnimation();
-        animation.setDuration(durationMillis);
-        animation.setRepeatCount(-1);
-        animation.setInterpolator(new LinearInterpolator());
-        animation.setRepeatMode(Animation.RESTART);
-        animation.setAnimationListener(new Animation.AnimationListener() {
+    @SuppressLint("WrongConstant")
+    public void startAnimation(int durationMillis) {
+        ValueAnimator valueAnimator = ValueAnimator.ofFloat(0, 1);
+        valueAnimator.setDuration(durationMillis);
+        valueAnimator.setInterpolator(new LinearInterpolator());
+        valueAnimator.setRepeatCount(-1);
+        valueAnimator.setRepeatMode(Animation.RESTART);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
-            public void onAnimationStart(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
-
-            @Override
-            public void onAnimationRepeat(Animation animation) {
-
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                int rotation = (int) ((float) valueAnimator.getAnimatedValue() * 360);
+                setRotation(rotation);
             }
         });
-        startAnimation(animation);
-    }
-
-    @Override
-    public void setRotation(float rotation) {
-        super.setRotation(rotation);
-    }
-
-    public class RotationAnimation extends Animation {
-        @Override
-        protected void applyTransformation(float interpolatedTime, Transformation t) {
-            super.applyTransformation(interpolatedTime, t);
-            int rotation = (int) (interpolatedTime * 360);
-            setRotation(rotation);
-        }
+        valueAnimator.start();
     }
 }

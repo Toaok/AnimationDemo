@@ -5,7 +5,7 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 /**
- * @author hpp
+ * @author Toaok
  * @version 1.0  2019/5/17.
  */
 public class MeasureUtil {

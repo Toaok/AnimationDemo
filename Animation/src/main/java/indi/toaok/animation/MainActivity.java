@@ -9,9 +9,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 
-import indi.toaok.animation.core.property.widget.coustom.PropertyAnimationWidget;
+import indi.toaok.animation.core.property.widget.coustom.PropertyAnimationView;
 import indi.toaok.animation.core.property.widget.refresh.SwipeRefreshLayout;
-import indi.toaok.animation.core.view.ViewAnimationWidget;
+import indi.toaok.animation.core.view.ViewAnimationView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,9 +21,9 @@ public class MainActivity extends AppCompatActivity {
     AppCompatButton mXmlExample;
     AppCompatButton mCodeExample;
 
-    ViewAnimationWidget mAnimationWidget;
+    ViewAnimationView mAnimationWidget;
 
-    PropertyAnimationWidget mPropertyAnimationWidget;
+    PropertyAnimationView mPropertyAnimationView;
 
     SwipeRefreshLayout mSwipeRefreshLayout;
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mXmlExample = findViewById(R.id.xml_example);
         mCodeExample = findViewById(R.id.code_example);
         mAnimationWidget = findViewById(R.id.view_animation_widget);
-        mPropertyAnimationWidget = findViewById(R.id.property_animation_widget);
+        mPropertyAnimationView = findViewById(R.id.property_animation_widget);
 
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
@@ -82,10 +82,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        mPropertyAnimationWidget.setOnClickListener(new View.OnClickListener() {
+        mPropertyAnimationView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mPropertyAnimationWidget.startAnimation(3000);
+                mPropertyAnimationView.startAnimation(3000);
             }
         });
 
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mPropertyAnimationWidget.startAnimation(2000);
+                mPropertyAnimationView.startAnimation(2000);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -107,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 mSwipeRefreshLayout.setRefreshing(false);
-                                mPropertyAnimationWidget.startAnimation(1000);
+                                mPropertyAnimationView.startAnimation(1000);
                             }
                         });
                     }
