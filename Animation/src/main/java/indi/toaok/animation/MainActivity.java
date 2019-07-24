@@ -7,13 +7,11 @@ import android.support.constraint.ConstraintLayout;
 import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
-import android.view.MotionEvent;
 import android.view.View;
 
-import indi.toaok.animation.core.property.widget.PropertyAnimationWidget;
-import indi.toaok.animation.core.property.widget.SwipeRefreshLayout;
+import indi.toaok.animation.core.property.widget.coustom.PropertyAnimationWidget;
+import indi.toaok.animation.core.property.widget.refresh.SwipeRefreshLayout;
 import indi.toaok.animation.core.view.ViewAnimationWidget;
-import indi.toaok.animation.utils.LogUtil;
 
 public class MainActivity extends AppCompatActivity {
 

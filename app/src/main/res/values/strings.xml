@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">AnimationDemo</string>
+    <string name="app_name_dao">道</string>
 </resources>

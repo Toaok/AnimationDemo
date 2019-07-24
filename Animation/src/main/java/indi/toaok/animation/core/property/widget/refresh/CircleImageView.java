@@ -1,4 +1,4 @@
-package indi.toaok.animation.core.property.widget;
+package indi.toaok.animation.core.property.widget.refresh;
 
 import android.content.Context;
 import android.graphics.Canvas;

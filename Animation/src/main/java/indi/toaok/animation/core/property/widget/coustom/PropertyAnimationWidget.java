@@ -1,4 +1,4 @@
-package indi.toaok.animation.core.property.widget;
+package indi.toaok.animation.core.property.widget.coustom;
 
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;

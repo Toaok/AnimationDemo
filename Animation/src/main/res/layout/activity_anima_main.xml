@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<indi.toaok.animation.core.property.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<indi.toaok.animation.core.property.widget.refresh.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipe_refresh_layout"
@@ -44,7 +44,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/code_example" />
 
-        <indi.toaok.animation.core.property.widget.PropertyAnimationWidget
+        <indi.toaok.animation.core.property.widget.coustom.PropertyAnimationWidget
             android:id="@+id/property_animation_widget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -56,4 +56,4 @@
     </android.support.constraint.ConstraintLayout>
 
 
-</indi.toaok.animation.core.property.widget.SwipeRefreshLayout>
+</indi.toaok.animation.core.property.widget.refresh.SwipeRefreshLayout>
