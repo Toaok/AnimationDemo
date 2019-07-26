@@ -11,18 +11,21 @@ import android.support.constraint.ConstraintLayout;
 import android.text.Layout;
 import android.text.StaticLayout;
 import android.text.TextPaint;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.SparseArray;
 import android.view.animation.LinearInterpolator;
 
 import com.blankj.utilcode.util.SpanUtils;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import indi.toaok.animation.MeasureUtil;
 import indi.toaok.animation.core.property.widget.span.ForegroundAlphaColorSpan;
 import indi.toaok.animation.core.property.widget.span.ForegroundAlphaColorSpanGroup;
+import indi.toaok.animation.utils.LogUtil;
 
 /**
  * @author Toaok
@@ -30,8 +33,9 @@ import indi.toaok.animation.core.property.widget.span.ForegroundAlphaColorSpanGr
  */
 public class TextWithImageLayout extends ConstraintLayout {
 
-    private static String sTEXT = "这是一个针对技术开发者的一个应用，你可以在掘金上获取最新最优质的技术干货，不仅仅是Android知识、前端、后端以至于产品和设计都有涉猎，想成为全栈工程师的朋友不要错过!";
+    private static String sText = "这是一个针对技术开发者的一个应用，你可以在掘金上获取最新最优质的技术干货，不仅仅是Android知识、前端、后端以至于产品和设计都有涉猎，想成为全栈工程师的朋友不要错过！";
 
+    private static String sRegex = "[\\x00-\\xff]+";
 
     private static int[] ATTRS = new int[]{
             android.R.attr.textSize,//16842901
@@ -61,7 +65,7 @@ public class TextWithImageLayout extends ConstraintLayout {
     ValueAnimator valueAnimator;
 
     //存储绘制Text的layout
-    SparseArray<StaticLayout> mLayoutArray;
+    SparseArray<SparseArray<StaticLayout>> mLayoutArray;
 
     public TextWithImageLayout(Context context) {
         this(context, null);
@@ -94,39 +98,48 @@ public class TextWithImageLayout extends ConstraintLayout {
 
         //根据高来算出有多少行（垂直方向上）
         int rows = (int) Math.ceil((mText.length() * 1.0) / rowWords);
+
         if (width > wordWidth && height > wordHeight) {
             mLayoutArray = new SparseArray<>();
             for (int row = 0; row < rows; row++) {
+                //行字符串
                 CharSequence rowSequence;
                 if ((row + 1) * rowWords < mText.length()) {
                     rowSequence = mText.subSequence(row * rowWords, (row + 1) * rowWords);
                 } else {
                     rowSequence = mText.subSequence(row * rowWords, mText.length());
                 }
-                String[] englishOrInteger = getEnglishOrIntegerString(rowSequence.toString());
+//                rowSequence = "这是一个针对技术开发者的一个应用，你可以在掘金上获取";
+                LogUtil.e(rowSequence.toString());
+                String[] rowStrings = getStrings(rowSequence.toString(), sRegex);
+                LogUtil.e(Arrays.asList(rowStrings).toString());
+                if (rowStrings != null) {
 
-
-                if (englishOrInteger != null) {
-                    for (String s : englishOrInteger) {
-
-                        StaticLayout staticLayout = generateStaticLayout(rowSequence, wordWidth);
+                    SparseArray<StaticLayout> rowLayouts = new SparseArray<>();
+                    for (int column = 0; column < rowStrings.length; column++) {
+                        String s = rowStrings[column];
+                        if (!TextUtils.isEmpty(s)) {
+                            int start = rowSequence.toString().indexOf(s);
+                            int end = start + s.length();
+                            StaticLayout staticLayout;
+                            if (isMatcher(s, sRegex)) {
+                                staticLayout = generateStaticLayout(rowSequence.subSequence(start, end), (int) mTextPaint.measureText(s));
+                            } else {
+                                staticLayout = generateStaticLayout(rowSequence.subSequence(start, end), wordWidth);
+                            }
+                            rowLayouts.append(column, staticLayout);
+                        }
                     }
-                }else {
-                    StaticLayout staticLayout = generateStaticLayout(rowSequence, wordWidth);
+                    mLayoutArray.append(row, rowLayouts);
                 }
-
-
-                StaticLayout staticLayout = generateStaticLayout(rowSequence, wordWidth);
-                mLayoutArray.append(row, staticLayout);
             }
         }
     }
 
 
     private StaticLayout generateStaticLayout(CharSequence source, int width) {
-        return new StaticLayout(source, mTextPaint, width, Layout.Alignment.ALIGN_NORMAL, 1.0F, 0F, false);
+        return new StaticLayout(source, mTextPaint, width, Layout.Alignment.ALIGN_CENTER, 1.0F, 0F, false);
     }
-
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         initDefault();
@@ -138,7 +151,7 @@ public class TextWithImageLayout extends ConstraintLayout {
     private void initDefault() {
         mTextSize = (int) MeasureUtil.sp2px(getContext(), 18);
         mTextColor = Color.BLACK;
-        mText = sTEXT;
+        mText = sText;
     }
 
 
@@ -155,9 +168,9 @@ public class TextWithImageLayout extends ConstraintLayout {
         mForegroundAlphaColorSpanGroup = new ForegroundAlphaColorSpanGroup(0);
 
         mSpanUtils = new SpanUtils();
-        for (int i = 0, len = sTEXT.length(); i < len; ++i) {
+        for (int i = 0, len = sText.length(); i < len; ++i) {
             ForegroundAlphaColorSpan span = new ForegroundAlphaColorSpan(Color.TRANSPARENT);
-            mSpanUtils.append(sTEXT.substring(i, i + 1)).setSpans(span);
+            mSpanUtils.append(sText.substring(i, i + 1)).setSpans(span);
             mForegroundAlphaColorSpanGroup.addSpan(span);
         }
         mText = mSpanUtils.create();
@@ -173,6 +186,9 @@ public class TextWithImageLayout extends ConstraintLayout {
     }
 
 
+    /**
+     * 当attachToWindow时启动动画
+     */
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -184,13 +200,36 @@ public class TextWithImageLayout extends ConstraintLayout {
 
         //每个汉字的宽
         int wordWidth = (int) getFontWight(mTextPaint, mText);
+        int wordHeight = (int) getFontHeight(mTextPaint);
 
         if (mLayoutArray != null) {
             canvas.save();
             canvas.translate(getWidth(), 0);
             for (int row = 0; row < mLayoutArray.size(); row++) {
                 canvas.translate(-wordWidth, 0);
-                mLayoutArray.get(row).draw(canvas);
+                SparseArray<StaticLayout> rowsLayout = mLayoutArray.get(row);
+                float dy = 0;
+                for (int colum = 0; rowsLayout != null && colum < rowsLayout.size(); colum++) {
+                    if (colum > 0) {
+                        CharSequence sequence = rowsLayout.get(colum - 1).getText();
+                        float offsetDy = wordHeight * sequence.length();
+                        canvas.translate(0, offsetDy);
+                        dy += offsetDy;
+                    }
+
+                    Layout rowLayout = rowsLayout.get(colum);
+
+                    if (isMatcher(rowLayout.getText().toString(), sRegex)) {
+                        canvas.translate(wordWidth, 0);
+                        canvas.rotate(90);
+                        rowLayout.draw(canvas);
+                        canvas.rotate(-90);
+                        canvas.translate(-wordWidth, 0);
+                    } else {
+                        rowLayout.draw(canvas);
+                    }
+                }
+                canvas.translate(0, -dy);
             }
             canvas.restore();
         }
@@ -226,6 +265,9 @@ public class TextWithImageLayout extends ConstraintLayout {
     }
 
 
+    /**
+     * 开始动画
+     */
     private void startAnim() {
         valueAnimator = ValueAnimator.ofFloat(0, 1);
         valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -245,21 +287,74 @@ public class TextWithImageLayout extends ConstraintLayout {
 
 
     /**
-     * 截取字符串中的字符串数组
+     * 根据正则将字符串切割
      *
-     * @param str
+     * @param str   字符串
+     * @param regex 匹配规则
      * @return
      */
-    private String[] getEnglishOrIntegerString(String str) {
-        String regex = "\\d+.\\d+|\\w+";
-        StringBuffer sb = new StringBuffer();
+    private String[] getStrings(String str, String regex) {
+        String[] result;
+
         Pattern pattern = Pattern.compile(regex);
-        Matcher ma = pattern.matcher(str);
-        while (ma.find()) {
-            str.indexOf(ma.group());
-            sb.append(",");
+        Matcher matcher = pattern.matcher(str);
+        String[] matchers = getMatcher(matcher);
+        String[] strings = str.split(regex);
+
+        result = new String[(matchers == null ? 0 : matchers.length) + (strings == null ? 0 : strings.length)];
+        for (int i = 0; i < result.length; i++) {//
+            if (strings[0] == null || strings[0].equals("")) {
+                if (i % 2 == 0) {
+                    if (i / 2 < matchers.length) {
+                        result[i] = matchers[i / 2];
+                    }
+                } else {
+                    if (i / 2 + 1 < strings.length) {
+                        result[i] = strings[i / 2 + 1];
+                    }
+                }
+            } else {
+                if (i % 2 == 0) {
+                    if (i / 2 < strings.length) {
+                        result[i] = strings[i / 2];
+                    }
+                } else {
+                    if (i / 2 < matchers.length) {
+                        result[i] = matchers[i / 2];
+                    }
+
+                }
+            }
         }
-        return sb.toString().split(",");
+        return result;
     }
 
+
+    /**
+     * 获取匹配的字符串
+     *
+     * @param matcher
+     * @return
+     */
+    private String[] getMatcher(Matcher matcher) {
+        StringBuffer sb = new StringBuffer();
+        boolean isFind = matcher.find();
+        while (true) {
+            if (!isFind) {
+                break;
+            }
+            sb.append(matcher.group());
+            isFind = matcher.find();
+            if (isFind) {
+                sb.append(",");
+            }
+        }
+        return sb.toString() == null || sb.toString().equals("") ? null : sb.toString().split(",");
+    }
+
+    public boolean isMatcher(String str, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.find();
+    }
 }

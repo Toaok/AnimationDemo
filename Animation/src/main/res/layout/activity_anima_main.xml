@@ -12,6 +12,14 @@
         android:layout_height="match_parent"
         tools:context=".MainActivity">
 
+        <indi.toaok.animation.core.view.RollImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/xml_example"
             android:layout_width="wrap_content"
@@ -48,9 +56,9 @@
             android:id="@+id/property_animation_widget"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:alpha="0"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            android:alpha="0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/view_animation_widget" />
     </android.support.constraint.ConstraintLayout>

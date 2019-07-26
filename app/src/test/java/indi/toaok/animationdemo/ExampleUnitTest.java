@@ -2,6 +2,7 @@ package indi.toaok.animationdemo;
 
 import org.junit.Test;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,53 +12,79 @@ import java.util.regex.Pattern;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 public class ExampleUnitTest {
+
+    private static String sText = "123.121dsa fsd这是一个针对技术开Android 发者的一个应3asas用，你可以在掘金上获取";
+    private static String sRegex = "[\\x00-\\xff]+";
+
     @Test
     public void addition_isCorrect() {
         test();
     }
 
     public void test() {
-        String str = "SUN公司被Oracle收购，是否意味着javad121被逼上了死路？";
-        System.out.println();
-        subString(str, getEnglishOrIntegerString(str));
+        CharSequence str = sText;
+        System.out.println(Arrays.asList(getStrings(str.toString(), sRegex)));
+        System.out.println(isMatcher(sText,sRegex));
+
+
     }
 
+    public boolean isMatcher(String str, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.find();
+    }
 
-    private void subString(String str, String[] initStrings) {
+    private String[] getStrings(String str, String regex) {
+        String[] result;
 
-        for (String sub : initStrings) {
-            if (str.equals(sub)) {
-                System.out.println(sub);
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        String[] matchers = getMatcher(matcher);
+        String[] strings = str.split(regex);
+
+        result = new String[(matchers == null ? 0 : matchers.length )+ (strings == null ? 0 : strings.length)];
+        for (int i = 0; i < result.length; i++) {//
+            if (strings[0] == null || strings[0].equals("")) {
+                if (i % 2 == 0) {
+                    if (i / 2 < matchers.length) {
+                        result[i] = matchers[i / 2];
+                    }
+                } else {
+                    if (i / 2 + 1 < strings.length) {
+                        result[i] = strings[i / 2 + 1];
+                    }
+                }
+            } else {
+                if (i % 2 == 0) {
+                    if (i / 2 < strings.length) {
+                        result[i] = strings[i / 2];
+                    }
+                } else {
+                    if (i / 2 < matchers.length) {
+                        result[i] = matchers[i / 2];
+                    }
+
+                }
+            }
+        }
+        return result;
+    }
+
+    private String[] getMatcher(Matcher matcher) {
+        StringBuffer sb = new StringBuffer();
+        boolean isFind = matcher.find();
+        while (true) {
+            if (!isFind) {
                 break;
             }
-            String[] childStrings = str.split(sub);
-            for (String sub1 : childStrings) {
-                if (sub1.equals("")) {
-                    System.out.println(sub);
-                    continue;
-                }
-                subString(sub1, initStrings);
+            sb.append(matcher.group());
+            isFind = matcher.find();
+            if (isFind) {
+                sb.append(",");
             }
         }
-
+        return sb.toString() == null || sb.toString().equals("") ? null : sb.toString().split(",");
     }
 
-
-    /**
-     * 截取字符串中的字符串数组
-     *
-     * @param str
-     * @return
-     */
-    private String[] getEnglishOrIntegerString(String str) {
-        String regex = "\\d+.\\d+|\\w+";
-        StringBuffer sb = new StringBuffer();
-        Pattern pattern = Pattern.compile(regex);
-        Matcher ma = pattern.matcher(str);
-        while (ma.find()) {
-            sb.append(ma.group());
-            sb.append(",");
-        }
-        return sb.toString().split(",");
-    }
 }

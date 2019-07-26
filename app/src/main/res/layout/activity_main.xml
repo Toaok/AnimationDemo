@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimary"
-    android:padding="20dp"
     tools:context=".MainActivity">
 
     <indi.toaok.animation.core.property.widget.coustom.TaiChiView

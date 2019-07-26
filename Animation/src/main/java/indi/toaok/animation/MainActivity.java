@@ -8,6 +8,7 @@ import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
+import android.widget.TextView;
 
 import indi.toaok.animation.core.property.widget.coustom.PropertyAnimationView;
 import indi.toaok.animation.core.property.widget.refresh.SwipeRefreshLayout;
@@ -42,7 +43,6 @@ public class MainActivity extends AppCompatActivity {
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void initView() {
-
         mRootLayout = findViewById(R.id.root_layout);
         CircularProgressDrawable progressDrawable;
         progressDrawable = new CircularProgressDrawable(this);
