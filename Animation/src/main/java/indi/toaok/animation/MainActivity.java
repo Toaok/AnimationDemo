@@ -13,6 +13,7 @@ import android.widget.TextView;
 import indi.toaok.animation.core.property.widget.coustom.PropertyAnimationView;
 import indi.toaok.animation.core.property.widget.refresh.SwipeRefreshLayout;
 import indi.toaok.animation.core.view.ViewAnimationView;
+import indi.toaok.animation.core.view.round.RollImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     PropertyAnimationView mPropertyAnimationView;
 
     SwipeRefreshLayout mSwipeRefreshLayout;
+
+    RollImageView mRollImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
-
+        mRollImageView = findViewById(R.id.roll_image_view);
     }
 
     private void initEvent() {
@@ -118,4 +121,28 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        mRollImageView.setDrawing(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mRollImageView.setDrawing(true);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        mRollImageView.setDrawing(false);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mRollImageView.setDrawing(false);
+    }
 }

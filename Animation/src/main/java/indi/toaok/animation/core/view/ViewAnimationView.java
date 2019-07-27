@@ -14,7 +14,7 @@ import android.view.animation.DecelerateInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.Transformation;
 
-import indi.toaok.animation.MeasureUtil;
+import indi.toaok.animation.utils.MeasureUtil;
 
 /**
  * @author Toaok

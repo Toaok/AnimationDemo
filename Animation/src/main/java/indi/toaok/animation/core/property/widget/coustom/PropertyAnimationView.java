@@ -13,7 +13,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.DecelerateInterpolator;
 
-import indi.toaok.animation.MeasureUtil;
+import indi.toaok.animation.utils.MeasureUtil;
 
 /**
  * @author Toaok

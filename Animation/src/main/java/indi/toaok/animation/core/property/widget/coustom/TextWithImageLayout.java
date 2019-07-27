@@ -22,7 +22,7 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import indi.toaok.animation.MeasureUtil;
+import indi.toaok.animation.utils.MeasureUtil;
 import indi.toaok.animation.core.property.widget.span.ForegroundAlphaColorSpan;
 import indi.toaok.animation.core.property.widget.span.ForegroundAlphaColorSpanGroup;
 import indi.toaok.animation.utils.LogUtil;

@@ -1,6 +1,5 @@
 package indi.toaok.animation.core.property.widget.coustom;
 
-import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -13,9 +12,8 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
-import android.view.animation.Transformation;
 
-import indi.toaok.animation.MeasureUtil;
+import indi.toaok.animation.utils.MeasureUtil;
 
 /**
  * @author Toaok

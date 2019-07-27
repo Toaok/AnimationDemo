@@ -1,4 +1,4 @@
-package indi.toaok.animation;
+package indi.toaok.animation.utils;
 
 import android.content.Context;
 import android.util.DisplayMetrics;
