@@ -27,7 +27,7 @@ import indi.toaok.animation.utils.MeasureUtil;
 public class DefaultBackgroundDrawable extends Drawable {
 
     private static final int[] GRAD_COLORS = new int[]{Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED};
-    private static final int[] GRAD_ALPHA = new int[]{Color.BLACK, Color.WHITE,Color.TRANSPARENT};
+    private static final int[] GRAD_ALPHA = new int[]{Color.BLACK, Color.WHITE,Color.BLACK};
 
     private Context mContext;
 
