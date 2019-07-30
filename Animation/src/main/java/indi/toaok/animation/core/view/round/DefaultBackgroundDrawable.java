@@ -1,72 +1,99 @@
 package indi.toaok.animation.core.view.round;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.ColorFilter;
+import android.graphics.ComposeShader;
 import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.shapes.Shape;
 import android.support.annotation.Nullable;
+
+import indi.toaok.animation.utils.MeasureUtil;
 
 /**
  * @author Toaok
  * @version 1.0  2019/7/27.
  */
 public class DefaultBackgroundDrawable extends Drawable {
-    int mHeight;
-    int mWidth;
-    Paint mPaint;
-    Rect mRect;
+
+    private static final int[] GRAD_COLORS = new int[]{Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED};
+    private static final int[] GRAD_ALPHA = new int[]{Color.BLACK, Color.WHITE,Color.TRANSPARENT};
+
+    private Context mContext;
+
+    private Shader mShader;
+
+    private Paint mPaint;
+    private Paint mPaintBackground;
+    private RectF mGradientRect;
+    private float mRadius = 0;
+
     int mAlpha = 255;
 
-    int[] mColors;
-
-    public DefaultBackgroundDrawable(int width, int height) {
-        mWidth = width;
-        mHeight = height;
+    public DefaultBackgroundDrawable(Context context) {
+        mContext = context;
         init();
     }
 
     private void init() {
-        generateColors();
-        mPaint = new Paint();
-        LinearGradient backGradient = new LinearGradient(0, 0, 0, mHeight,mColors, null, Shader.TileMode.CLAMP);
-        mPaint.setShader(backGradient);
-        mRect = new Rect(0, 0, mWidth, mHeight);
+        mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintBackground = new Paint(Paint.ANTI_ALIAS_FLAG);
+        mPaintBackground.setColor(Color.WHITE);
     }
 
-    private void generateColors() {
-        mColors = new int[256 * 256 * 256];
-        for (int r = 0; r <= 255; r++) {
-            for (int g = 0; g <= 255; g++) {
-                for (int b = 0; b <= 255; b++) {
-                    mColors[r + g + b] = Color.argb(0, r, g, b);
-                }
-            }
-        }
-    }
 
+    @Override
+    protected void onBoundsChange(Rect bounds) {
+        super.onBoundsChange(bounds);
+        mGradientRect = new RectF(0,0,getIntrinsicWidth(),getIntrinsicHeight());
+        LinearGradient gradientShader = new LinearGradient(mGradientRect.left, mGradientRect.top, mGradientRect.left, mGradientRect.bottom, GRAD_COLORS, null, Shader.TileMode.CLAMP);
+        LinearGradient alphaShader = new LinearGradient(mGradientRect.left, mGradientRect.top, mGradientRect.right, mGradientRect.top, GRAD_ALPHA, null, Shader.TileMode.CLAMP);
+        mShader = new ComposeShader(alphaShader, gradientShader, PorterDuff.Mode.MULTIPLY);
+        mPaint.setShader(mShader);
+    }
 
     @Override
     public void draw(Canvas canvas) {
-        canvas.drawRect(mRect, mPaint);
+        canvas.save();
+        canvas.drawRoundRect(mGradientRect, mRadius, mRadius, mPaintBackground);
+        canvas.drawRoundRect(mGradientRect, mRadius, mRadius, mPaint);
+        canvas.restore();
+    }
+
+
+    @Override
+    public int getIntrinsicWidth() {
+        return MeasureUtil.getScreenWight(mContext);
     }
 
     @Override
-    public void setAlpha(int alpha) {
-        mAlpha = alpha;
-    }
+    public int getIntrinsicHeight() {
+        return MeasureUtil.getScreenHeight(mContext)*2;
 
-    @Override
-    public void setColorFilter(@Nullable ColorFilter filter) {
-        mPaint.setColorFilter(filter);
     }
 
     @Override
     public int getOpacity() {
         return PixelFormat.TRANSLUCENT;
+    }
+
+    @Override
+    public void setAlpha(int alpha) {
+
+    }
+
+    @Override
+    public void setColorFilter(@Nullable ColorFilter filter) {
+
     }
 }

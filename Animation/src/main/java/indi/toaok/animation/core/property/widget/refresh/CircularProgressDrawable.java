@@ -387,7 +387,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
         mAnimator.cancel();
         mRing.storeOriginals();
         // Already showing some part of the ring
-        if (mRing.getEndTrim() != mRing.getStartTrim()) {
+        if (mRing.getEndTrim() != mRing.getDefaultEndTrim()) {
             mFinishing = true;
             mAnimator.setDuration(ANIMATION_DURATION / 2);
             mAnimator.start();
@@ -435,7 +435,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
      * the next color.
      */
     private void updateRingColor(float interpolatedTime, Ring ring) {
-        LogUtil.e("updateRingColor",interpolatedTime+"");
+        LogUtil.e("updateRingColor", interpolatedTime + "");
         if (interpolatedTime > COLOR_CHANGE_OFFSET) {
             ring.setColor(evaluateColorChange((interpolatedTime - COLOR_CHANGE_OFFSET)
                             / (1f - COLOR_CHANGE_OFFSET), ring.getStartingColor(),
@@ -563,6 +563,8 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
         final Paint mPaint = new Paint();
         final Paint mCirclePaint = new Paint();
 
+        final float mDefaultEndTrim = 0.1f;
+
         //分成的段数
         int mSegments = 3;
         //每段的最小间隔
@@ -573,7 +575,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
         float mStartAngle;
 
         float mStartTrim = 0f;
-        float mEndTrim = 0.2f;
+        float mEndTrim = mDefaultEndTrim;
         float mRotation = 0f;
         float mStrokeWidth = 5f;
 
@@ -749,6 +751,10 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
             return mStartingStartTrim;
         }
 
+        float getDefaultEndTrim() {
+            return mDefaultEndTrim;
+        }
+
         float getStartingEndTrim() {
             return mStartingEndTrim;
         }
@@ -822,7 +828,7 @@ public class CircularProgressDrawable extends Drawable implements Animatable {
             mStartingEndTrim = 0;
             mStartingRotation = 0;
             setStartTrim(0);
-            setEndTrim(0);
+            setEndTrim(mDefaultEndTrim);
             setRotation(0);
         }
     }

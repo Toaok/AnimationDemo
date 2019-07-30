@@ -1,19 +1,21 @@
 package indi.toaok.animation;
 
 import android.annotation.TargetApi;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
-import android.support.v4.widget.CircularProgressDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import indi.toaok.animation.core.property.widget.coustom.PropertyAnimationView;
 import indi.toaok.animation.core.property.widget.refresh.SwipeRefreshLayout;
 import indi.toaok.animation.core.view.ViewAnimationView;
+import indi.toaok.animation.core.view.round.DefaultBackgroundDrawable;
 import indi.toaok.animation.core.view.round.RollImageView;
+import indi.toaok.animation.utils.LogUtil;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
     RollImageView mRollImageView;
 
+    ImageView mImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,10 +51,6 @@ public class MainActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private void initView() {
         mRootLayout = findViewById(R.id.root_layout);
-        CircularProgressDrawable progressDrawable;
-        progressDrawable = new CircularProgressDrawable(this);
-        progressDrawable.setStyle(CircularProgressDrawable.DEFAULT);
-        mRootLayout.setBackground(progressDrawable);
         mXmlExample = findViewById(R.id.xml_example);
         mCodeExample = findViewById(R.id.code_example);
         mAnimationWidget = findViewById(R.id.view_animation_widget);
@@ -59,6 +59,12 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
         mRollImageView = findViewById(R.id.roll_image_view);
+
+
+        Drawable drawable;
+        drawable = new DefaultBackgroundDrawable(this);
+        mImageView = findViewById(R.id.iv_img);
+        mImageView.setBackground(drawable);
     }
 
     private void initEvent() {
@@ -123,26 +129,22 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        mRollImageView.setDrawing(true);
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
-        mRollImageView.setDrawing(true);
+        mRollImageView.onResume();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mRollImageView.setDrawing(false);
+        LogUtil.e("onPause");
+        mRollImageView.onPause();
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        mRollImageView.setDrawing(false);
+        LogUtil.e("onStop");
+        mRollImageView.onStop();
     }
 }

@@ -53,7 +53,7 @@ public class RollImageView extends RoundBackGroundView {
     //蒙板画笔
     Paint mMaskPaint;
 
-    //门板的透明度
+    //蒙板的透明度
     @FloatRange(from = 0, to = 1)
     float mMaskAlpha;
 
@@ -73,20 +73,20 @@ public class RollImageView extends RoundBackGroundView {
 
     private void init() {
         initDefault();
-        initSrcBitmap();
+
         initMaskPaint();
     }
 
     private void initDefault() {
         offsetY = 0;
         offsetX = 0;
-        mMaskAlpha = 0.5f;
-        mDrawable = getResources().getDrawable(R.drawable.bg_beautiful_girl);
-
+        mMaskAlpha = 0.3f;
+        bitmapWidth = bitmapHeight = 1;
     }
 
     private void initSrcBitmap() {
-        mBitmap =  BitmapFactory.decodeResource(getResources(),R.drawable.bg_beautiful_girl);
+//        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_beautiful_girl);
+        mBitmap = drawable2Bitmap(mDrawable);
         bitmapWidth = mBitmap.getWidth();
         bitmapHeight = mBitmap.getHeight();
         mSrcRect = new Rect(0, 0, bitmapWidth, bitmapHeight);
@@ -99,6 +99,13 @@ public class RollImageView extends RoundBackGroundView {
         mMaskPaint.setAlpha((int) (mMaskAlpha * 255));
     }
 
+    @Override
+    protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
+        super.onLayout(changed, left, top, right, bottom);
+        mDrawable = new DefaultBackgroundDrawable(getContext());
+        mDrawable.setBounds(left,top,right,bottom);
+        initSrcBitmap();
+    }
 
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
@@ -113,11 +120,10 @@ public class RollImageView extends RoundBackGroundView {
     protected void drawBackgroud(Canvas canvas) {
         super.drawBackgroud(canvas);
 
-        mDstRectTop = new Rect(0, -offsetY, bitmapWidth, bitmapHeight - offsetY);
-        mDstRectBottom = new Rect(0, bitmapHeight - offsetY, bitmapWidth, bitmapHeight * 2 - offsetY);
+        mDstRectTop = new Rect(0, -offsetY, displayWidth, bitmapHeight - offsetY);
+        mDstRectBottom = new Rect(0, bitmapHeight - offsetY, displayWidth, bitmapHeight * 2 - offsetY);
         canvas.drawBitmap(mBitmap, mSrcRect, mDstRectTop, null);
         canvas.drawBitmap(mBitmap, mSrcRect, mDstRectBottom, null);
-
         canvas.drawRect(mMaskRect, mMaskPaint);
     }
 
@@ -126,6 +132,7 @@ public class RollImageView extends RoundBackGroundView {
         super.update();
         offsetY += mSpeedY;
         offsetY = offsetY % bitmapHeight;
+
     }
 
 

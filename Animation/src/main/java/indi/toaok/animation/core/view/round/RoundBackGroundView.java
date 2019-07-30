@@ -19,6 +19,7 @@ public class RoundBackGroundView extends SurfaceView implements SurfaceHolder.Ca
 
     private boolean isDrawing;
 
+    private Thread mLocaleThread;
 
     public RoundBackGroundView(Context context) {
         this(context, null);
@@ -43,7 +44,7 @@ public class RoundBackGroundView extends SurfaceView implements SurfaceHolder.Ca
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         isDrawing = true;
-        new Thread(this).start();
+        onResume();
     }
 
     @Override
@@ -90,5 +91,22 @@ public class RoundBackGroundView extends SurfaceView implements SurfaceHolder.Ca
 
     public void setDrawing(boolean drawing) {
         isDrawing = drawing;
+    }
+
+    public void onResume() {
+        if (mLocaleThread == null) {
+            mLocaleThread = new Thread(this);
+            mLocaleThread.start();
+        }
+        isDrawing = true;
+    }
+
+    public void onPause() {
+        isDrawing = false;
+    }
+
+    public void onStop() {
+        isDrawing = false;
+        mLocaleThread = null;
     }
 }
