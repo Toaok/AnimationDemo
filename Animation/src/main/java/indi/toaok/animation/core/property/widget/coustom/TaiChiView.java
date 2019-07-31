@@ -3,6 +3,7 @@ package indi.toaok.animation.core.property.widget.coustom;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -31,6 +32,13 @@ public class TaiChiView extends View {
 
     int defaultSize;
 
+    private static int[] ATTRS = new int[]{
+            android.R.attr.alpha,//16843551
+    };
+
+    private static final int INDEX_ATTR_ALPHA = 0;
+
+
     public TaiChiView(Context context) {
         this(context, null);
     }
@@ -54,6 +62,7 @@ public class TaiChiView extends View {
         mBlackPaint.setAntiAlias(true);
         mBlackPaint.setDither(true);
         mBlackPaint.setStrokeCap(Paint.Cap.ROUND);
+        mBlackPaint.setAlpha((int) (getAlpha()*255));
 
         mWhitePaint = new Paint();
         mWhitePaint.setStyle(Paint.Style.FILL);
@@ -61,6 +70,7 @@ public class TaiChiView extends View {
         mWhitePaint.setAntiAlias(true);
         mWhitePaint.setDither(true);
         mWhitePaint.setStrokeCap(Paint.Cap.ROUND);
+        mWhitePaint.setAlpha((int) (getAlpha()*255));
 
         paidding = 10;
     }
@@ -86,7 +96,6 @@ public class TaiChiView extends View {
         }
         return result;
     }
-
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);

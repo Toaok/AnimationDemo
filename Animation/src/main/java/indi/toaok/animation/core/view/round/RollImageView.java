@@ -1,16 +1,17 @@
 package indi.toaok.animation.core.view.round;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.FloatRange;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -22,6 +23,11 @@ import indi.toaok.animation.R;
  * @version 1.0  2019/7/26.
  */
 public class RollImageView extends RoundBackGroundView {
+
+    float mSpeed;
+
+    @DrawableRes
+    int mDrawableRes;
 
     Drawable mDrawable;
 
@@ -40,7 +46,7 @@ public class RollImageView extends RoundBackGroundView {
     int offsetX;
 
     //垂直方向上偏移速度
-    int mSpeedY = 10;
+    int mSpeedY;
 
     //绘制bitmap的大小(对bitmap进行矩形裁剪)
     Rect mSrcRect;
@@ -80,16 +86,12 @@ public class RollImageView extends RoundBackGroundView {
     private void initDefault() {
         offsetY = 0;
         offsetX = 0;
-        mMaskAlpha = 0.3f;
+        mSpeed = 2;
+        mSpeedY = (int) (mSpeed * getResources().getDisplayMetrics().density);
+        mMaskAlpha = 0f;
         bitmapWidth = bitmapHeight = 1;
-    }
-
-    private void initSrcBitmap() {
-//        mBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.bg_beautiful_girl);
-        mBitmap = drawable2Bitmap(mDrawable);
-        bitmapWidth = mBitmap.getWidth();
-        bitmapHeight = mBitmap.getHeight();
-        mSrcRect = new Rect(0, 0, bitmapWidth, bitmapHeight);
+        mDrawableRes = R.drawable.image_bg;
+        mDrawable = new DefaultBackgroundDrawable(getContext());
     }
 
     private void initMaskPaint() {
@@ -100,11 +102,29 @@ public class RollImageView extends RoundBackGroundView {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+    }
+
+    @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        mDrawable = new DefaultBackgroundDrawable(getContext());
-        mDrawable.setBounds(left,top,right,bottom);
-        initSrcBitmap();
+        if (mBitmap == null) {
+            try {
+                mBitmap = scale(getBitmap(mDrawableRes), right - left, false);
+                if (mBitmap == null) {
+                    mDrawable.setBounds(left, top, right, bottom);
+                    mBitmap = drawable2Bitmap(mDrawable);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                mBitmap = drawable2Bitmap(mDrawable);
+            }
+            bitmapWidth = mBitmap.getWidth();
+            bitmapHeight = mBitmap.getHeight();
+            mSrcRect = new Rect(0, 0, bitmapWidth, bitmapHeight);
+        }
     }
 
     @Override
@@ -112,7 +132,6 @@ public class RollImageView extends RoundBackGroundView {
         super.onSizeChanged(w, h, oldw, oldh);
         displayWidth = w;
         displayHeight = h;
-
         mMaskRect = new Rect(0, 0, w, h);
     }
 
@@ -162,18 +181,29 @@ public class RollImageView extends RoundBackGroundView {
         return bitmap;
     }
 
-    Bitmap bitmapRotation(Bitmap bm, final int orientationDegree) {
 
-        Matrix m = new Matrix();
-        m.setRotate(orientationDegree, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
-        try {
-            Bitmap bm1 = Bitmap.createBitmap(bm, 0, 0, bm.getWidth(), bm.getHeight(), m, true);
-            return bm1;
-
-        } catch (OutOfMemoryError ex) {
-        }
-        return null;
+    public Bitmap getBitmap(@DrawableRes final int resId) {
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        final Resources resources = getResources();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeResource(resources, resId, options);
+        options.inScaled = false;
+        options.inJustDecodeBounds = false;
+        return BitmapFactory.decodeResource(resources, resId, options);
     }
 
 
+    public static Bitmap scale(final Bitmap src,
+                               final float newWidth,
+                               final boolean recycle) {
+        if (isEmptyBitmap(src)) return null;
+        float newHeight = newWidth * src.getHeight() / src.getWidth();
+        Bitmap ret = Bitmap.createScaledBitmap(src, (int) newWidth, (int) newHeight, true);
+        if (recycle && !src.isRecycled() && ret != src) src.recycle();
+        return ret;
+    }
+
+    private static boolean isEmptyBitmap(final Bitmap src) {
+        return src == null || src.getWidth() == 0 || src.getHeight() == 0;
+    }
 }

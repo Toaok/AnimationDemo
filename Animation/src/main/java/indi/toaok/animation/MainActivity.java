@@ -59,12 +59,6 @@ public class MainActivity extends AppCompatActivity {
         mSwipeRefreshLayout = findViewById(R.id.swipe_refresh_layout);
 
         mRollImageView = findViewById(R.id.roll_image_view);
-
-
-        Drawable drawable;
-        drawable = new DefaultBackgroundDrawable(this);
-        mImageView = findViewById(R.id.iv_img);
-        mImageView.setBackground(drawable);
     }
 
     private void initEvent() {
@@ -106,7 +100,6 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-
                         try {
                             Thread.sleep(3000);
                         } catch (InterruptedException e) {

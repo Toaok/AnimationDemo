@@ -9,6 +9,7 @@ import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.constraint.ConstraintLayout;
 import android.text.Layout;
+import android.text.PrecomputedText;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.view.animation.LinearInterpolator;
 
 import com.blankj.utilcode.util.SpanUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -84,7 +86,7 @@ public class TextWithImageLayout extends ConstraintLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        textLayout(getWidth(), getHeight());
+        textLayout(right - left, bottom - top);
     }
 
     private void textLayout(int width, int height) {
@@ -97,24 +99,22 @@ public class TextWithImageLayout extends ConstraintLayout {
         int rowWords = height / wordHeight;
 
         //根据高来算出有多少行（垂直方向上）
-        int rows = (int) Math.ceil((mText.length() * 1.0) / rowWords);
+        ArrayList<Integer> rows = calculatRows(mText, sRegex, height);
 
         if (width > wordWidth && height > wordHeight) {
             mLayoutArray = new SparseArray<>();
-            for (int row = 0; row < rows; row++) {
+            for (int row = 0; row < rows.size(); row++) {
                 //行字符串
                 CharSequence rowSequence;
-                if ((row + 1) * rowWords < mText.length()) {
-                    rowSequence = mText.subSequence(row * rowWords, (row + 1) * rowWords);
-                } else {
-                    rowSequence = mText.subSequence(row * rowWords, mText.length());
+                int startIndex = 0;
+                if (row > 0) {
+                    startIndex = rows.get(row - 1);
                 }
-//                rowSequence = "这是一个针对技术开发者的一个应用，你可以在掘金上获取";
+                rowSequence = mText.subSequence(startIndex, rows.get(row));
                 LogUtil.e(rowSequence.toString());
                 String[] rowStrings = getStrings(rowSequence.toString(), sRegex);
                 LogUtil.e(Arrays.asList(rowStrings).toString());
                 if (rowStrings != null) {
-
                     SparseArray<StaticLayout> rowLayouts = new SparseArray<>();
                     for (int column = 0; column < rowStrings.length; column++) {
                         String s = rowStrings[column];
@@ -122,7 +122,7 @@ public class TextWithImageLayout extends ConstraintLayout {
                             int start = rowSequence.toString().indexOf(s);
                             int end = start + s.length();
                             StaticLayout staticLayout;
-                            if (isMatcher(s, sRegex)) {
+                            if (isMatcher(s)) {
                                 staticLayout = generateStaticLayout(rowSequence.subSequence(start, end), (int) mTextPaint.measureText(s));
                             } else {
                                 staticLayout = generateStaticLayout(rowSequence.subSequence(start, end), wordWidth);
@@ -136,6 +136,22 @@ public class TextWithImageLayout extends ConstraintLayout {
         }
     }
 
+    private ArrayList<Integer> calculatRows(CharSequence str, String regex, double rowWidth) {
+
+        float wordHeight = getFontHeight(mTextPaint);
+        float strWidth = 0;
+        ArrayList<Integer> positions = new ArrayList();
+        for (int i = 0; i < str.length(); i++) {
+            if (strWidth >= rowWidth) {
+                strWidth = 0;
+                i--;
+                positions.add(i);
+            }
+            strWidth += isMatcher(str.charAt(i)) ? mTextPaint.measureText(String.valueOf(str.charAt(i))) : wordHeight;
+        }
+        positions.add(str.length());
+        return positions;
+    }
 
     private StaticLayout generateStaticLayout(CharSequence source, int width) {
         return new StaticLayout(source, mTextPaint, width, Layout.Alignment.ALIGN_CENTER, 1.0F, 0F, false);
@@ -148,6 +164,7 @@ public class TextWithImageLayout extends ConstraintLayout {
         initAnimSpan();
     }
 
+    //初始化默认值
     private void initDefault() {
         mTextSize = (int) MeasureUtil.sp2px(getContext(), 18);
         mTextColor = Color.BLACK;
@@ -155,6 +172,7 @@ public class TextWithImageLayout extends ConstraintLayout {
     }
 
 
+    //初始化画笔
     private void initPaint() {
         mTextPaint = new TextPaint();
         mTextPaint.setDither(true);
@@ -164,6 +182,7 @@ public class TextWithImageLayout extends ConstraintLayout {
         mTextPaint.setTextSize(mTextSize);
     }
 
+    //初始化动画效果Span
     private void initAnimSpan() {
         mForegroundAlphaColorSpanGroup = new ForegroundAlphaColorSpanGroup(0);
 
@@ -204,22 +223,30 @@ public class TextWithImageLayout extends ConstraintLayout {
 
         if (mLayoutArray != null) {
             canvas.save();
+            //水平方向上移到最右边
             canvas.translate(getWidth(), 0);
             for (int row = 0; row < mLayoutArray.size(); row++) {
+                //水平方向上偏移
                 canvas.translate(-wordWidth, 0);
                 SparseArray<StaticLayout> rowsLayout = mLayoutArray.get(row);
                 float dy = 0;
                 for (int colum = 0; rowsLayout != null && colum < rowsLayout.size(); colum++) {
-                    if (colum > 0) {
+                    if (colum > 0) {//垂直方向上偏移
                         CharSequence sequence = rowsLayout.get(colum - 1).getText();
-                        float offsetDy = wordHeight * sequence.length();
+                        float offsetDy = 0;
+                        if (isMatcher(sequence)) {
+                            offsetDy = mTextPaint.measureText(sequence, 0, sequence.length());
+                        } else {
+                            offsetDy = wordHeight * sequence.length();
+                        }
                         canvas.translate(0, offsetDy);
                         dy += offsetDy;
                     }
 
                     Layout rowLayout = rowsLayout.get(colum);
 
-                    if (isMatcher(rowLayout.getText().toString(), sRegex)) {
+                    //绘制文本
+                    if (isMatcher(rowLayout.getText().toString())) {
                         canvas.translate(wordWidth, 0);
                         canvas.rotate(90);
                         rowLayout.draw(canvas);
@@ -229,6 +256,7 @@ public class TextWithImageLayout extends ConstraintLayout {
                         rowLayout.draw(canvas);
                     }
                 }
+                //恢复垂直方向上的偏移
                 canvas.translate(0, -dy);
             }
             canvas.restore();
@@ -298,7 +326,8 @@ public class TextWithImageLayout extends ConstraintLayout {
 
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
-        String[] matchers = getMatcher(matcher);
+        String matcherStr = getMatcher(matcher);
+        String[] matchers = matcherStr == null ? null : matcherStr.split(",");
         String[] strings = str.split(regex);
 
         result = new String[(matchers == null ? 0 : matchers.length) + (strings == null ? 0 : strings.length)];
@@ -331,12 +360,12 @@ public class TextWithImageLayout extends ConstraintLayout {
 
 
     /**
-     * 获取匹配的字符串
+     * 获取匹配的字符串以逗号分隔
      *
      * @param matcher
      * @return
      */
-    private String[] getMatcher(Matcher matcher) {
+    private String getMatcher(Matcher matcher) {
         StringBuffer sb = new StringBuffer();
         boolean isFind = matcher.find();
         while (true) {
@@ -349,12 +378,50 @@ public class TextWithImageLayout extends ConstraintLayout {
                 sb.append(",");
             }
         }
-        return sb.toString() == null || sb.toString().equals("") ? null : sb.toString().split(",");
+        return sb.toString() == null || sb.toString().equals("") ? null : sb.toString();
+    }
+
+
+    /**
+     * 获取匹配的字符串
+     *
+     * @param str
+     * @param regex
+     * @return
+     */
+    private String getMatcher(String str, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        return getMatcher(matcher);
     }
 
     public boolean isMatcher(String str, String regex) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(str);
         return matcher.find();
+    }
+
+    public boolean isMatcher(char str, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(String.valueOf(str));
+        return matcher.find();
+    }
+
+    public boolean isMatcher(CharSequence str, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.find();
+    }
+
+    public boolean isMatcher(String str) {
+        return isMatcher(str, sRegex);
+    }
+
+    public boolean isMatcher(char str) {
+        return isMatcher(str, sRegex);
+    }
+
+    public boolean isMatcher(CharSequence str) {
+        return isMatcher(str, sRegex);
     }
 }

@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
  */
 public class ExampleUnitTest {
 
-    private static String sText = "123.121dsa fsd这是一个针对技术开Android 发者的一个应3asas用，你可以在掘金上获取";
+    private static CharSequence sText = "123.121dsa fsd这是一个针对技术开Android 发者的一个应3asas用，你可以在掘金上获取";
     private static String sRegex = "[\\x00-\\xff]+";
 
     @Test
@@ -24,7 +24,7 @@ public class ExampleUnitTest {
     public void test() {
         CharSequence str = sText;
         System.out.println(Arrays.asList(getStrings(str.toString(), sRegex)));
-        System.out.println(isMatcher(sText,sRegex));
+        System.out.println(isMatcher('中',sRegex));
 
 
     }
@@ -35,7 +35,14 @@ public class ExampleUnitTest {
         return matcher.find();
     }
 
+    public boolean isMatcher(char str, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(String.valueOf(str));
+        return matcher.find();
+    }
+
     private String[] getStrings(String str, String regex) {
+
         String[] result;
 
         Pattern pattern = Pattern.compile(regex);
@@ -64,7 +71,6 @@ public class ExampleUnitTest {
                     if (i / 2 < matchers.length) {
                         result[i] = matchers[i / 2];
                     }
-
                 }
             }
         }

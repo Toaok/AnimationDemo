@@ -27,7 +27,7 @@ import indi.toaok.animation.utils.MeasureUtil;
 public class DefaultBackgroundDrawable extends Drawable {
 
     private static final int[] GRAD_COLORS = new int[]{Color.RED, Color.YELLOW, Color.GREEN, Color.CYAN, Color.BLUE, Color.MAGENTA, Color.RED};
-    private static final int[] GRAD_ALPHA = new int[]{Color.BLACK, Color.WHITE,Color.BLACK};
+    private static final int[] GRAD_ALPHA = new int[]{Color.BLACK, Color.WHITE, Color.BLACK};
 
     private Context mContext;
 
@@ -55,7 +55,7 @@ public class DefaultBackgroundDrawable extends Drawable {
     @Override
     protected void onBoundsChange(Rect bounds) {
         super.onBoundsChange(bounds);
-        mGradientRect = new RectF(0,0,getIntrinsicWidth(),getIntrinsicHeight());
+        mGradientRect = new RectF(0, 0, getIntrinsicWidth(), getIntrinsicHeight());
         LinearGradient gradientShader = new LinearGradient(mGradientRect.left, mGradientRect.top, mGradientRect.left, mGradientRect.bottom, GRAD_COLORS, null, Shader.TileMode.CLAMP);
         LinearGradient alphaShader = new LinearGradient(mGradientRect.left, mGradientRect.top, mGradientRect.right, mGradientRect.top, GRAD_ALPHA, null, Shader.TileMode.CLAMP);
         mShader = new ComposeShader(alphaShader, gradientShader, PorterDuff.Mode.MULTIPLY);
@@ -78,8 +78,7 @@ public class DefaultBackgroundDrawable extends Drawable {
 
     @Override
     public int getIntrinsicHeight() {
-        return MeasureUtil.getScreenHeight(mContext)*2;
-
+        return MeasureUtil.getScreenHeight(mContext) * 2;
     }
 
     @Override
@@ -89,11 +88,15 @@ public class DefaultBackgroundDrawable extends Drawable {
 
     @Override
     public void setAlpha(int alpha) {
-
+        mAlpha = alpha;
+        mPaint.setAlpha(mAlpha);
+        invalidateSelf();
     }
 
     @Override
     public void setColorFilter(@Nullable ColorFilter filter) {
-
+        mPaint.setColorFilter(filter);
+        invalidateSelf();
     }
+
 }
