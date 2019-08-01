@@ -7,13 +7,13 @@
     android:background="@color/colorPrimary"
     android:paddingTop="50dp"
     android:paddingBottom="50dp"
-    android:textSize="20pt"
+    android:textSize="18pt"
     tools:context=".MainActivity">
 
     <indi.toaok.animation.core.property.widget.coustom.TaiChiView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:alpha="0.5"
+        android:alpha="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -3,7 +3,7 @@ package indi.toaok.animation.core.property.widget.coustom;
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -32,13 +32,6 @@ public class TaiChiView extends View {
 
     int defaultSize;
 
-    private static int[] ATTRS = new int[]{
-            android.R.attr.alpha,//16843551
-    };
-
-    private static final int INDEX_ATTR_ALPHA = 0;
-
-
     public TaiChiView(Context context) {
         this(context, null);
     }
@@ -62,7 +55,6 @@ public class TaiChiView extends View {
         mBlackPaint.setAntiAlias(true);
         mBlackPaint.setDither(true);
         mBlackPaint.setStrokeCap(Paint.Cap.ROUND);
-        mBlackPaint.setAlpha((int) (getAlpha()*255));
 
         mWhitePaint = new Paint();
         mWhitePaint.setStyle(Paint.Style.FILL);
@@ -70,7 +62,6 @@ public class TaiChiView extends View {
         mWhitePaint.setAntiAlias(true);
         mWhitePaint.setDither(true);
         mWhitePaint.setStrokeCap(Paint.Cap.ROUND);
-        mWhitePaint.setAlpha((int) (getAlpha()*255));
 
         paidding = 10;
     }
@@ -96,17 +87,25 @@ public class TaiChiView extends View {
         }
         return result;
     }
+
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
-
-        int widgth = canvas.getWidth();
+        int width = canvas.getWidth();
         int height = canvas.getHeight();
+        canvas.save();
+        canvas.drawBitmap(drawTaiChi(width, height), 0, 0, null);
+        canvas.restore();
+    }
 
-        int radius = Math.min(widgth, height) / 2 - paidding;
 
+    private Bitmap drawTaiChi(int width, int height) {
+        Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+
+        int radius = Math.min(width, height) / 2 - paidding;
         //画布移动到中心
-        canvas.translate(widgth / 2, height / 2);
+        canvas.translate(width / 2, height / 2);
 
         RectF mainRectF = new RectF(-radius, -radius, radius, radius);//绘制的最终区域，一定填满
 
@@ -115,25 +114,29 @@ public class TaiChiView extends View {
 
         final float whiteStartAngle = -90;
         final float whitwSweepAngle = 180;
-        canvas.save();
         //绘制两个半圆
         canvas.drawArc(mainRectF, blackStartAngle, blackSweepAngle, true, mBlackPaint);
         canvas.drawArc(mainRectF, whiteStartAngle, whitwSweepAngle, true, mWhitePaint);
 
         int smallRadius = radius / 2;
+
         //绘制两小圆
-        canvas.drawCircle(0, smallRadius, smallRadius, mBlackPaint);
-        canvas.drawCircle(0, -smallRadius, smallRadius, mWhitePaint);
+        RectF smallBlackRectF = new RectF(-smallRadius, 0, smallRadius, smallRadius * 2);
+        canvas.drawArc(smallBlackRectF, whiteStartAngle, whitwSweepAngle, true, mBlackPaint);
+        RectF smallWhiteRectF = new RectF(-smallRadius, -smallRadius * 2, smallRadius, 0);
+        canvas.drawArc(smallWhiteRectF, blackStartAngle, blackSweepAngle, true, mWhitePaint);
+
         //绘制两个鱼眼
         canvas.drawCircle(0, -smallRadius, smallRadius / 4, mBlackPaint);
         canvas.drawCircle(0, smallRadius, smallRadius / 4, mWhitePaint);
-        canvas.restore();
+        return bitmap;
     }
+
 
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        startAnimation(3000);
+        startAnimation(5000);
     }
 
     @SuppressLint("WrongConstant")

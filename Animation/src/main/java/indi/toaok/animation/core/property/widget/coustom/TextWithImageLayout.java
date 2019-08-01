@@ -35,7 +35,7 @@ import indi.toaok.animation.utils.LogUtil;
  */
 public class TextWithImageLayout extends ConstraintLayout {
 
-    private static String sText = "这是一个针对技术开发者的一个应用，你可以在掘金上获取最新最优质的技术干货，不仅仅是Android知识、前端、后端以至于产品和设计都有涉猎，想成为全栈工程师的朋友不要错过！";
+    private static String sText = "这是一个针对技术开发者的一个应用，你可以\n在掘金上获\n取最新\n最优质的技术干货，不仅仅是Android知识、前端、后端以至于产品和设计都有涉猎，想成为全栈工程师的朋友不要错过！";
 
     private static String sRegex = "[\\x00-\\xff]+";
 
@@ -87,6 +87,7 @@ public class TextWithImageLayout extends ConstraintLayout {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
         textLayout(right - left, bottom - top);
+
     }
 
     private void textLayout(int width, int height) {
@@ -94,9 +95,6 @@ public class TextWithImageLayout extends ConstraintLayout {
         int wordWidth = (int) getFontWight(mTextPaint, mText);
         //每个汉字的高
         int wordHeight = (int) getFontHeight(mTextPaint);
-
-        //根据高来算出每行显示多少文字（垂直方向上）
-        int rowWords = height / wordHeight;
 
         //根据高来算出有多少行（垂直方向上）
         ArrayList<Integer> rows = calculatRows(mText, sRegex, height);
@@ -137,11 +135,14 @@ public class TextWithImageLayout extends ConstraintLayout {
     }
 
     private ArrayList<Integer> calculatRows(CharSequence str, String regex, double rowWidth) {
-
         float wordHeight = getFontHeight(mTextPaint);
         float strWidth = 0;
         ArrayList<Integer> positions = new ArrayList();
         for (int i = 0; i < str.length(); i++) {
+            if (str.charAt(i) == '\n') {
+                strWidth = 0;
+                positions.add(i);
+            }
             if (strWidth >= rowWidth) {
                 strWidth = 0;
                 i--;
@@ -217,7 +218,12 @@ public class TextWithImageLayout extends ConstraintLayout {
     @Override
     public void dispatchDraw(Canvas canvas) {
 
-        //每个汉字的宽
+        super.dispatchDraw(canvas);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        //每个汉字的宽/高
         int wordWidth = (int) getFontWight(mTextPaint, mText);
         int wordHeight = (int) getFontHeight(mTextPaint);
 
@@ -261,9 +267,8 @@ public class TextWithImageLayout extends ConstraintLayout {
             }
             canvas.restore();
         }
-        super.dispatchDraw(canvas);
+        super.onDraw(canvas);
     }
-
 
     /**
      * baseline：字符基线

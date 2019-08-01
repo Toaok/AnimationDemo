@@ -26,7 +26,7 @@ public class ExampleUnitTest {
         System.out.println(Arrays.asList(getStrings(str.toString(), sRegex)));
         System.out.println(isMatcher('中',sRegex));
 
-
+        System.out.println(Integer.MAX_VALUE);
     }
 
     public boolean isMatcher(String str, String regex) {
