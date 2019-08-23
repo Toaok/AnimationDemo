@@ -2,7 +2,7 @@
 
 ## 分类
 
-<table>
+<table bgcolor="#000000">
 <tr>
 <th colspan="2">Android 动画类型</th><th>引入时间</th><th>所在包名</th><th>动画类的命名</th><td>动画所改变的对象</td>
 </tr>
