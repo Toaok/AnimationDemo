@@ -4,7 +4,7 @@
 
 <table bgcolor="#000000">
 <tr>
-<th colspan="2">Android 动画类型</th><th>引入时间</th><th>所在包名</th><th>动画类的命名</th><td>动画所改变的对象</td>
+<th colspan="2">Android 动画类型</th><th>引入时间</th><th>所在包名</th><th>动画类的命名</th><th>动画所改变的对象</th>
 </tr>
 <tr><td rowspan="2">View Animation</td>
 <td>Tween Animation</td>
