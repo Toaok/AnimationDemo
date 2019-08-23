@@ -203,7 +203,6 @@ public class PropertyAnimationView extends View {
 
 
     public void startAnimation(int time) {
-
         if (isPositive) {
             mPositiveAnimatorSet.setDuration(time);
             mPositiveAnimatorSet.start();

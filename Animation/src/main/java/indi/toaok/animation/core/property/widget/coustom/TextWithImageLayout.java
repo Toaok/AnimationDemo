@@ -6,15 +6,16 @@ import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 import android.support.constraint.ConstraintLayout;
 import android.text.Layout;
-import android.text.PrecomputedText;
 import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.SparseArray;
+import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 import com.blankj.utilcode.util.SpanUtils;
@@ -24,10 +25,10 @@ import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import indi.toaok.animation.utils.MeasureUtil;
 import indi.toaok.animation.core.property.widget.span.ForegroundAlphaColorSpan;
 import indi.toaok.animation.core.property.widget.span.ForegroundAlphaColorSpanGroup;
 import indi.toaok.animation.utils.LogUtil;
+import indi.toaok.animation.utils.MeasureUtil;
 
 /**
  * @author Toaok
@@ -35,7 +36,7 @@ import indi.toaok.animation.utils.LogUtil;
  */
 public class TextWithImageLayout extends ConstraintLayout {
 
-    private static String sText = "这是一个针对技术开发者的一个应用，你可以\n在掘金上获\n取最新\n最优质的技术干货，不仅仅是Android知识、前端、后端以至于产品和设计都有涉猎，想成为全栈工程师的朋友不要错过！";
+    private static String sText = "这是一个针对技术开发者的一个应用，你可以在掘金上获取最新最优质的技术干货，不仅仅是\nAndroid知识、前端、后端以至于产品和设计都有涉猎，想成为全栈工程师的朋友不要错过！";
 
     private static String sRegex = "[\\x00-\\xff]+";
 
@@ -68,6 +69,8 @@ public class TextWithImageLayout extends ConstraintLayout {
 
     //存储绘制Text的layout
     SparseArray<SparseArray<StaticLayout>> mLayoutArray;
+    //存储子View的区域
+    ArrayList<Rect> childers;
 
     public TextWithImageLayout(Context context) {
         this(context, null);
@@ -86,8 +89,16 @@ public class TextWithImageLayout extends ConstraintLayout {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         super.onLayout(changed, left, top, right, bottom);
-        textLayout(right - left, bottom - top);
 
+        for (int i = 0; i < getChildCount(); i++) {
+            if (childers == null) {
+                childers = new ArrayList();
+            }
+            View view = getChildAt(i);
+            childers.add(new Rect(view.getLeft(), view.getTop(), view.getRight(), getBottom()));
+        }
+
+        textLayout(right - left, bottom - top);
     }
 
     private void textLayout(int width, int height) {
@@ -125,6 +136,7 @@ public class TextWithImageLayout extends ConstraintLayout {
                             } else {
                                 staticLayout = generateStaticLayout(rowSequence.subSequence(start, end), wordWidth);
                             }
+
                             rowLayouts.append(column, staticLayout);
                         }
                     }
@@ -142,6 +154,7 @@ public class TextWithImageLayout extends ConstraintLayout {
             if (str.charAt(i) == '\n') {
                 strWidth = 0;
                 positions.add(i);
+                continue;
             }
             if (strWidth >= rowWidth) {
                 strWidth = 0;
@@ -157,6 +170,7 @@ public class TextWithImageLayout extends ConstraintLayout {
     private StaticLayout generateStaticLayout(CharSequence source, int width) {
         return new StaticLayout(source, mTextPaint, width, Layout.Alignment.ALIGN_CENTER, 1.0F, 0F, false);
     }
+
 
     private void init(Context context, AttributeSet attrs, int defStyleAttr) {
         initDefault();
@@ -227,12 +241,13 @@ public class TextWithImageLayout extends ConstraintLayout {
         int wordWidth = (int) getFontWight(mTextPaint, mText);
         int wordHeight = (int) getFontHeight(mTextPaint);
 
+
         if (mLayoutArray != null) {
             canvas.save();
             //水平方向上移到最右边
             canvas.translate(getWidth(), 0);
             for (int row = 0; row < mLayoutArray.size(); row++) {
-                //水平方向上偏移
+                //水平方向上偏移(换行)
                 canvas.translate(-wordWidth, 0);
                 SparseArray<StaticLayout> rowsLayout = mLayoutArray.get(row);
                 float dy = 0;
@@ -311,7 +326,6 @@ public class TextWithImageLayout extends ConstraintLayout {
                 postInvalidate();
             }
         });
-
         valueAnimator.setInterpolator(new LinearInterpolator());
         valueAnimator.setDuration(100 * mText.length());
         valueAnimator.setStartDelay(2000);

@@ -69,10 +69,21 @@
             android:layout_height="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/test"
             app:layout_constraintTop_toBottomOf="@id/property_animation_widget" />
 
 
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Test"
+            android:textAllCaps="false"
+            app:layout_constraintTop_toBottomOf="@id/color_picker"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
     </android.support.constraint.ConstraintLayout>
 
 
