@@ -1,7 +1,6 @@
 package indi.toaok.animation;
 
 import android.annotation.TargetApi;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -10,10 +9,10 @@ import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.ImageView;
 
+import indi.toaok.animation.core.view.GatewayAnimationView;
 import indi.toaok.animation.core.property.widget.coustom.PropertyAnimationView;
 import indi.toaok.animation.core.property.widget.refresh.SwipeRefreshLayout;
 import indi.toaok.animation.core.view.ViewAnimationView;
-import indi.toaok.animation.core.view.round.DefaultBackgroundDrawable;
 import indi.toaok.animation.core.view.round.RollImageView;
 import indi.toaok.animation.utils.LogUtil;
 
@@ -91,8 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 mPropertyAnimationView.startAnimation(3000);
             }
         });
-
-
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

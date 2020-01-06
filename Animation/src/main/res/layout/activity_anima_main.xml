@@ -16,6 +16,7 @@
             android:id="@+id/roll_image_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -67,23 +68,30 @@
             android:id="@+id/color_picker"
             android:layout_width="100dp"
             android:layout_height="100dp"
+            app:layout_constraintBottom_toTopOf="@id/gateway_animation_widget"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/test"
             app:layout_constraintTop_toBottomOf="@id/property_animation_widget" />
 
 
-        <android.support.v7.widget.AppCompatButton
-            android:id="@+id/test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Test"
-            android:textAllCaps="false"
-            app:layout_constraintTop_toBottomOf="@id/color_picker"
+        <indi.toaok.animation.core.property.widget.coustom.GatawayAnimationView
+            android:id="@+id/gateway_animation_widget"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            />
+            app:layout_constraintTop_toBottomOf="@id/color_picker" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:src="@drawable/bg_beautiful_girl"
+            app:layout_constraintBottom_toBottomOf="@id/gateway_animation_widget"
+            app:layout_constraintEnd_toEndOf="@id/gateway_animation_widget"
+            android:layout_margin="20dp"
+            app:layout_constraintStart_toStartOf="@id/gateway_animation_widget"
+            app:layout_constraintTop_toTopOf="@id/gateway_animation_widget" />
     </android.support.constraint.ConstraintLayout>
 
 
