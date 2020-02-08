@@ -74,22 +74,66 @@
             app:layout_constraintTop_toBottomOf="@id/property_animation_widget" />
 
 
-        <indi.toaok.animation.core.property.widget.coustom.GatawayAnimationView
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#000000"
+            app:layout_constraintBottom_toBottomOf="@id/gateway_animation_widget"
+            app:layout_constraintEnd_toEndOf="@id/gateway_animation_widget"
+            app:layout_constraintStart_toStartOf="@id/gateway_animation_widget"
+            app:layout_constraintTop_toTopOf="@id/gateway_animation_widget" />
+
+        <indi.toaok.animation.core.property.widget.coustom.GatawayTestAnimationView
             android:id="@+id/gateway_animation_widget"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="58dp"
+            android:layout_height="58dp"
+            app:arcEndColor="#1A2634"
+            app:arcStartColor="#1A2634"
+            app:arcWidth="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/color_picker" />
+            app:layout_constraintTop_toBottomOf="@id/color_picker"
+            app:spaceAngles="30,30,30"
+            app:startAngle="-10" />
+
+        <indi.toaok.animation.core.property.widget.coustom.GatawayTestAnimationView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="6dp"
+            app:arcEndColor="#1A2618"
+            app:arcStartColor="#1A2618"
+            app:arcWidth="3dp"
+            app:layout_constraintBottom_toBottomOf="@id/gateway_animation_widget"
+            app:layout_constraintEnd_toEndOf="@id/gateway_animation_widget"
+            app:layout_constraintStart_toStartOf="@id/gateway_animation_widget"
+            app:layout_constraintTop_toTopOf="@id/gateway_animation_widget"
+            app:spaceAngles="60,10,30"
+            app:startAngle="-30" />
+
+        <indi.toaok.animation.core.property.widget.coustom.GatawayTestAnimationView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="13dp"
+            app:arcEndColor="#5489f5"
+            app:arcStartColor="#5489f5"
+            app:arcWidth="1dp"
+            app:isClockwise="false"
+            app:layout_constraintBottom_toBottomOf="@id/gateway_animation_widget"
+            app:layout_constraintEnd_toEndOf="@id/gateway_animation_widget"
+            app:layout_constraintStart_toStartOf="@id/gateway_animation_widget"
+            app:layout_constraintTop_toTopOf="@id/gateway_animation_widget"
+            app:spaceAngles="60"
+            app:startAngle="-90" />
 
         <ImageView
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@drawable/bg_beautiful_girl"
+            android:layout_margin="20dp"
+            android:src="@drawable/ic_gateway"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="@id/gateway_animation_widget"
             app:layout_constraintEnd_toEndOf="@id/gateway_animation_widget"
-            android:layout_margin="20dp"
             app:layout_constraintStart_toStartOf="@id/gateway_animation_widget"
             app:layout_constraintTop_toTopOf="@id/gateway_animation_widget" />
     </android.support.constraint.ConstraintLayout>

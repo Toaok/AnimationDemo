@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="GatawayTestAnimationView">
+        <!--弧间距数组-->
+        <attr name="spaceAngles" format="string" />
+        <!--起点，默认0-->
+        <attr name="startAngle" format="integer" />
+        <!--弧的宽度-->
+        <attr name="arcWidth" format="dimension" />
+        <attr name="arcStartColor" format="color" />
+        <attr name="arcEndColor" format="color" />
+        <attr name="isClockwise" format="boolean" />
+    </declare-styleable>
+
+</resources>

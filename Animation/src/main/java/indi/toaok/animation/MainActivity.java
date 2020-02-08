@@ -1,6 +1,7 @@
 package indi.toaok.animation;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
@@ -8,13 +9,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatButton;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
-import indi.toaok.animation.core.view.GatewayAnimationView;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
+
 import indi.toaok.animation.core.property.widget.coustom.PropertyAnimationView;
 import indi.toaok.animation.core.property.widget.refresh.SwipeRefreshLayout;
 import indi.toaok.animation.core.view.ViewAnimationView;
 import indi.toaok.animation.core.view.round.RollImageView;
 import indi.toaok.animation.utils.LogUtil;
+import indi.toaok.animation.zxing.ScanQRActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -80,6 +85,10 @@ public class MainActivity extends AppCompatActivity {
         mAnimationWidget.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                new IntentIntegrator(MainActivity.this)
+                        .setOrientationLocked(false)
+                        .setCaptureActivity(ScanQRActivity.class)
+                        .initiateScan();
                 mAnimationWidget.startAnimation(3000);
             }
         });
@@ -112,7 +121,6 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }).start();
 
-
             }
         });
     }
@@ -136,5 +144,19 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         LogUtil.e("onStop");
         mRollImageView.onStop();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if (result != null) {
+            if (result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "Scanned: " + result.getContents(), Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
